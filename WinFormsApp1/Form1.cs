@@ -7,29 +7,20 @@ namespace WinFormsApp1
     public partial class Form1 : Form
     {
         public List<Patient> patients = new List<Patient>();
+        private const string path = "C:\\Users\\admin\\Desktop\\json.json";
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void buttonDownload_Click(object sender, EventArgs e)
         {
-            string jsonText = File.ReadAllText("C:\\Users\\admin\\Desktop\\json.json");
+            if (!File.Exists(path))
+            {
+                MessageBox.Show("Файл не найден!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var jsonText = File.ReadAllText(path);
             patients = JsonSerializer.Deserialize<List<Patient>>(jsonText);
             LoadData();
         }
@@ -38,22 +29,34 @@ namespace WinFormsApp1
         {
             dataGridView.DataSource = null;
             dataGridView.DataSource = patients;
-            //comboBox1.DataSource = null;
-            //comboBox1.DataSource = games;
-            ////отображение на комбо боксе
-            //comboBox1.DisplayMember = "Genre";
-            ////значение в комбо боксе
-            //comboBox1.ValueMember = "Genre";
         }
 
-        private void label4_Click(object sender, EventArgs e)
+        private bool ValidateInputs()
         {
+            if (string.IsNullOrWhiteSpace(textBoxName.Text))
+            {
+                MessageBox.Show("Введите имя пациента", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
 
+            if (!int.TryParse(textBoxAge.Text, out _))
+            {
+                MessageBox.Show("Введите корректный возраст", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(textBoxPalata.Text))
+            {
+                MessageBox.Show("Введите номер палаты", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            return true;
         }
 
         private void buttonUpload_Click(object sender, EventArgs e)
         {
-            FileStream fileStream = new FileStream("C:\\Users\\admin\\Desktop\\jsonUpload.json", FileMode.OpenOrCreate);
+            FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate);
             var test = JsonSerializer.Serialize(patients);
             fileStream.Write(System.Text.Encoding.UTF8.GetBytes(test), 0, test.Length);
             fileStream.Flush();
@@ -62,6 +65,8 @@ namespace WinFormsApp1
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
+            if (!ValidateInputs())
+                return;
             patients.Add(new Patient
             {
                 Name = textBoxName.Text,

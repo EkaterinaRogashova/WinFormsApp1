@@ -85,7 +85,6 @@
             label1.Size = new Size(39, 20);
             label1.TabIndex = 4;
             label1.Text = "Имя";
-            label1.Click += label1_Click;
             // 
             // label2
             // 
@@ -104,7 +103,6 @@
             label3.Size = new Size(64, 20);
             label3.TabIndex = 6;
             label3.Text = "Возраст";
-            label3.Click += label3_Click;
             // 
             // dataGridView
             // 
@@ -152,7 +150,6 @@
             label4.Size = new Size(64, 20);
             label4.TabIndex = 11;
             label4.Text = "Возраст";
-            label4.Click += label4_Click;
             // 
             // buttonSearch
             // 
@@ -205,7 +202,6 @@
             Controls.Add(buttonAdd);
             Name = "Form1";
             Text = "Form1";
-            Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
